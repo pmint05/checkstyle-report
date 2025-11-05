@@ -1,6 +1,42 @@
 #import "/template.typ": *
 #import "@preview/algo:0.3.4": algo, code, comment, d, i
 
+#let code-figure(code, lang: "typst", _label: none, caption: none) = {
+  let code-style(content) = {
+    set par(justify: false)
+    set text(
+      size: 13pt,
+      font: "JetBrains Mono",
+    )
+    grid(
+      columns: (100%, 100%),
+      column-gutter: -100%,
+      block(
+        radius: 1em,
+        fill: luma(246),
+        width: 100%,
+        inset: 1em,
+        content,
+      ),
+    )
+  }
+
+  [
+    #figure(
+      box(
+        align(left)[
+          #code-style(
+            raw(code, lang: lang, block: true),
+          )
+          #v(0.5cm)
+        ],
+      ),
+      caption: caption,
+    )
+    #if (_label != none) { label(_label) }
+  ]
+}
+
 #[
   #set heading(numbering: "Chương 1.1")
   = Áp dụng Checkstyle phân tích dự án thực tế <chuong3>
@@ -20,33 +56,21 @@ Có 3 cách để tích hợp Checkstyle vào quy trình phát triển phần m�
 - Sử dụng Checkstyle thông qua command line.
 - Tích hợp Checkstyle vào IDE (Eclipse, IntelliJ IDEA).
 - Tích hợp Checkstyle vào hệ thống build tự động (Maven, Gradle).
-Trong khuôn khổ báo cáo này, nhóm sẽ sử dụng cách thứ hai -- tích hợp Checkstyle vào IDE để thực hiện phân tích mã nguồn dự án Megabasterd.
+Trong khuôn khổ báo cáo này, nhóm sẽ sử dụng cách thứ nhất -- Chạy Checkstyle thông qua command line để thực hiện phân tích mã nguồn dự án Megabasterd.
 
 Công cụ và phiên bản được  sử dụng:
+- JDK: 25.0.1
+- Checkstyle: 12.1.1
 - IDE: IntelliJ IDEA Ultimate 2024.3
-- SDK: OpenJDK 23.0.1
-- Plugin: Checkstyle-IDEA 5.114.0
-Các bước cài đặt Checkstyle-IDEA trên IntelliJ:
-1. Mở IntelliJ IDEA, vào `File` $->$ `Settings` (hoặc `Preferences` trên macOS) $->$ `Plugins`.
-#figure(
-  image("/images/setup-step-1.png", width: 90%),
-  caption: "Cài đặt plugin Checkstyle-IDEA trên IntelliJ IDEA",
-)
-2. Trong tab `Marketplace`, tìm kiếm "Checkstyle-IDEA", chọn plugin và nhấn `Install`.
-#figure(
-  image("/images/setup-step-2.png", width: 90%),
-  caption: "Cài đặt plugin Checkstyle-IDEA trên IntelliJ IDEA",
-)
-3. Sau khi cài đặt xong, ấn "Restart IDE" để khởi động lại IntelliJ IDEA và hoàn tất quá trình cài đặt.
-#figure(
-  image("/images/setup-step-3.png", width: 90%),
-  caption: "Cài đặt plugin Checkstyle-IDEA trên IntelliJ IDEA",
-)
+Các bước cài đặt Checkstyle:
++ Truy cập trang #link("https://github.com/checkstyle/checkstyle/releases")[Github Release của Checkstyle].
++ Tải về file JAR phiên bản mới nhất (tại thời điểm viết báo cáo là 12.1.1).
++ Đặt file JAR vào một thư mục cố định trên máy tính, ví dụ: `C:\checkstyle\checkstyle-12.1.1-all.jar`.
 
 == Cấu hình và thực thi kiểm thử
 === Cấu hình quy tắc kiểm thử
 
-Trước khi tiến hành kiểm thử, cần cấu hình Checkstyle-IDEA để sử dụng quy tắc kiểm thử phù hợp với dự án. Checkstyle cung cấp sẵn 2 bộ quy tắc: #link("https://raw.githubusercontent.com/checkstyle/checkstyle/refs/heads/master/src/main/resources/google_checks.xml")[Google Checks] và #link("https://raw.githubusercontent.com/checkstyle/checkstyle/refs/heads/master/src/main/resources/sun_checks.xml")[Sun Checks].
+Trên trang Github chính thức của Checkstyle có cung cấp sẵn 2 bộ quy tắc kiểm thử phổ biến là #link("https://raw.githubusercontent.com/checkstyle/checkstyle/refs/heads/master/src/main/resources/google_checks.xml")[Google Checks] và #link("https://raw.githubusercontent.com/checkstyle/checkstyle/refs/heads/master/src/main/resources/sun_checks.xml")[Sun Checks].
 
 // https://raw.githubusercontent.com/checkstyle/checkstyle/refs/heads/master/src/main/resources/sun_checks.xml
 // https://raw.githubusercontent.com/checkstyle/checkstyle/refs/heads/master/src/main/resources/google_checks.xml
@@ -112,36 +136,102 @@ Trước khi tiến hành kiểm thử, cần cấu hình Checkstyle-IDEA để 
 Từ bảng so sánh trên, có thể thấy _Google Checks_ linh hoạt, hiện đại và phù hợp với các dự án mã nguồn mở hơn, trong khi _Sun Checks_ nghiêm ngặt và phù hợp với các doanh nghiệp truyền thống hơn.
 
 
-Bên cạnh 2 bộ quy tắc có sẵn, Checkstyle cũng cho phép người dùng tự định nghĩa các quy tắc riêng thông qua file XML cấu hình. Cú pháp của file cấu hình XML được mô tả chi tiết trong #link("https://checkstyle.org/config.html")[tài liệu chính thức của Checkstyle].
+Bên cạnh 2 bộ quy tắc có sẵn, người dùng có thể tự định nghĩa các quy tắc riêng thông qua file XML cấu hình. Cú pháp của file cấu hình XML được mô tả chi tiết trong #link("https://checkstyle.org/config.html")[tài liệu chính thức của Checkstyle].
 
-Một file cấu hình XML cơ bản gồm có:
-// [TODO: Mô tả chi tiết cách cấu hình bằng file XML]
+Một file cấu hình XML bao gồm các `module` (quy tắc kiểm thử) được tổ chức theo cấu trúc cây, trong đó mỗi `module` có thể chứa các `property` (thuộc tính) để tùy chỉnh hành vi của quy tắc đó, và có thể lồng các `module` con bên trong để tạo thành các nhóm quy tắc phức tạp hơn. 
 
+Mỗi `module` được phân biệt với nhau bằng trường `name` hoặc `property` có `name` là `id`. 
+
+Các `property` thường có 2 trường chính là `name` (tên thuộc tính) và `value` (giá trị thuộc tính).
+
+#let example = read("/code/config.example.xml")
+
+#figure(
+  box(
+    align(left)[
+      #grid(
+        columns: (100%, 100%),
+        column-gutter: -100%,
+        block(
+          radius: 1em,
+          fill: luma(246),
+          width: 100%,
+          inset: 1em,
+        )[
+          #set text(size: 10pt, font: "JetBrains Mono")
+          #raw(example, lang: "xml", block: true)
+
+        ],
+      )
+      #v(0.5cm)
+    ],
+  ),
+  caption: "Ví dụ về file cấu hình Checkstyle XML",
+) <fig:config-xml-example>
 
 Do dự án Megabasterd là một dự án mã nguồn mở, nhóm quyết định sử dụng bộ quy tắc _Google Checks_ để phân tích mã nguồn dự án này.
 
-Để cấu hình Checkstyle-IDEA sử dụng bộ quy tắc _Google Checks_, thực hiện các bước sau:
-1. Mở IntelliJ IDEA, vào `File` $->$ `Settings` (hoặc `Preferences` trên macOS) $->$ `Tools` $->$ `Checkstyle`.
-#figure(
-  image("/images/config-step-1.png", width: 90%),
-  caption: "Cấu hình Checkstyle-IDEA trên IntelliJ IDEA",
-)
-2. Tích chọn `Google Checks` $->$ ấn `Apply` $->$ `OK` để lưu cấu hình.
-#figure(
-  image("/images/config-step-2.png", width: 90%),
-  caption: "Cấu hình Checkstyle-IDEA trên IntelliJ IDEA",
-)
-
 === Thực thi kiểm thử
-Checkstyle hỗ trợ tính năng real-time scan, do đó sau khi cấu hình xong, Checkstyle sẽ tự động phân tích mã nguồn của file đang đang mở trong IDE và hiển thị các vi phạm trong cửa sổ `Problems` của IntelliJ IDEA.
+Sau khi tải file cấu hình `google_checks.xml` và clone dự án Megabasterd về máy, tiến hành chạy Checkstyle thông qua command line bằng lệnh:
 
-#figure(
-  image("/images/real-time-scan.png", width: 90%),
-  caption: "Checkstyle real-time scan trên IntelliJ IDEA",
+#code-figure(
+  "java -jar C:\checkstyle\checkstyle-12.1.1-all.jar \ \n-c C:\checkstyle\google_checks.xml \ \n-f xml \ \n-o C:\checkstyle\checkstyle-result.xml \ \nD:\CODE\Java\megabasterd\src",
+  _label: "hello",
+  caption: "Lệnh chạy Checkstyle qua command line",
 )
 
+
+Trong đó:
+- `-c`: Chỉ định file cấu hình quy tắc kiểm thử.
+- `-f xml`: Chỉ định định dạng đầu ra là XML.
+- `-o`: Chỉ định file đầu ra để lưu kết quả kiểm thử.
+
+Bên cạnh những tham số trên, Checkstyle CLI còn hỗ trợ nhiều tham số khác để tùy chỉnh quá trình kiểm thử, chi tiết xem tại #link("https://checkstyle.org/cmdline.html")[tài liệu chính thức của Checkstyle].
+
+Người dùng cũng có thể chạy Checkstyle trên một file cụ thể thay vì toàn bộ thư mục, bằng cách thay thế đường dẫn thư mục `D:\CODE\Java\megabasterd\src` trong lệnh trên bằng đường dẫn file cần kiểm tra, ví dụ:
+
+`D:\CODE\Java\megabasterd\src\...\AboutDialog.java`.
 
 == Kết quả kiểm thử
+
+Sau khi chạy, Checkstyle sẽ phân tích toàn bộ file có đuôi `.java`, `.properties` và `.xml` (do cấu hình `fileExtensions` của `google_checks`) trong thư mục `src` của dự án Megabasterd, và ghi kết quả kiểm thử vào file `checkstyle-result.xml` (#link("https://raw.githubusercontent.com/pmint05/checkstyle-report/refs/heads/main/out/checkstyle-result.xml")[nội dung file]).
+Dưới đây là một phần của file kết quả sau khi thực thi kiểm thử:
+
+#let result = read("/out/checkstyle-result.xml")
+
+#figure(
+  box(
+    align(left)[
+      #grid(
+        columns: (100%, 100%),
+        column-gutter: -100%,
+        block(
+          radius: 1em,
+          fill: luma(246),
+          width: 100%,
+          inset: 1em,
+        )[
+          #set text(size: 10pt, font: "JetBrains Mono")
+          #raw(result, lang: "xml", block: true)
+
+        ],
+      )
+      #v(0.5cm)
+    ],
+  ),
+  caption: "Kết quả phân tích mã nguồn dự án Megabasterd",
+) <fig:checkstyle-xml-result>
+
 == Phân tích kết quả
+
+Sau khi phân tích file `checkstyle-result.xml`, có thể thấy hầu hết các lỗi vi phạm thuộc dạng _Indentation_ (thụt lề) vì dự án Megabasterd sử dụng 4 space cho mỗi cấp thụt lề, trong khi _Google Checks_ yêu cầu 2 space. Ngoài ra còn có một số lỗi khác như:
+- _LineLength_: Độ dài dòng vượt quá 100 ký tự.
+- _WhitespaceArround_: Thiếu khoảng trắng xung quanh các toán tử.
+- _AvoidStarImport_: Sử dụng `import` dạng `.*`.
+- _EmptyCatchBlock_: Khối `catch` trống.
+- _SummaryJavadoc_: Thiếu JavaDoc tóm tắt cho class hoặc method
+- Các lỗi tên biến, tên phương thức không tuân thủ quy ước đặt tên của Google.
+
+
 
 #pagebreak()

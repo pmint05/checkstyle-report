@@ -1,0 +1,7 @@
+Starting audit...
+[WARN] D:\CODE\Java\megabasterd\src\main\java\com\tonikelope\megabasterd\AboutDialog.java:10:1: 'package' should be separated from previous line. [EmptyLineSeparator]
+[WARN] D:\CODE\Java\megabasterd\src\main\java\com\tonikelope\megabasterd\AboutDialog.java:12:51: Using the '.*' form of import should be avoided - com.tonikelope.megabasterd.MainPanel.*. [AvoidStarImport]
+[WARN] D:\CODE\Java\megabasterd\src\main\java\com\tonikelope\megabasterd\AboutDialog.java:13:51: Using the '.*' form of import should be avoided - com.tonikelope.megabasterd.MiscTools.*. [AvoidStarImport]
+[WARN] D:\CODE\Java\megabasterd\src\main\java\com\tonikelope\megabasterd\AboutDialog.java:14:1: 'java.awt.Color' should be separated from previous import group by one line. [CustomImportOrder]
+[WARN] D:\CODE\Java\megabasterd\src\main\java\com\tonikelope\megabasterd\AboutDialog.java:20: Summary javadoc is missing. [SummaryJavadoc]
+[WARN] D:\CODE\Java\megabasterd\src\main\java\com\tonikelope\megabasterd\AboutDialog.java:26:5: 'member def modifier' has incorrect indentation level 4, expected level should be 2. [Indentation]

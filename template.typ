@@ -1,20 +1,14 @@
-#import "@preview/showybox:2.0.1" : showybox
+#import "@preview/showybox:2.0.1": showybox
 #import "src/00_trang_bia.typ": trang_bia
 #import "src/01_trang_phu_bia.typ": trang_phu_bia
 #import "@preview/codly:1.3.0": *
 
 
 #let heading_numbering(..nums) = {
-  return str(counter(heading).get().first()) + "." + nums
-  .pos()
-  .map(str)
-  .join(".")
+  return str(counter(heading).get().first()) + "." + nums.pos().map(str).join(".")
 }
 #let phuluc_numbering(..nums) = {
-  return str.from-unicode(counter(heading).get().at(1) + 64) + "." + nums
-  .pos()
-  .map(str)
-  .join(".")
+  return str.from-unicode(counter(heading).get().at(1) + 64) + "." + nums.pos().map(str).join(".")
 }
 
 #let outline_algo(x, caption, label) = {
@@ -84,18 +78,16 @@
   {
     show outline.entry.where(level: 1): it => {
       v(20pt, weak: true)
-      strong(
-        {
-          if (it.element.numbering != none) {
-            let number = numbering(it.element.numbering, ..counter(heading).at(it.element.location()))
-            box(width: 5em, number) + ". "
-          }
-          link(it.element.location())[#it.element.body ]
-          box(width: 1fr, it.fill)
-          h(3pt)
-          link(it.element.location())[#it.page()]
-        },
-      )
+      strong({
+        if (it.element.numbering != none) {
+          let number = numbering(it.element.numbering, ..counter(heading).at(it.element.location()))
+          box(width: 5em, number) + ". "
+        }
+        link(it.element.location())[#it.element.body ]
+        box(width: 1fr, it.fill)
+        h(3pt)
+        link(it.element.location())[#it.page()]
+      })
     }
     show outline.entry.where(level: 2): it => {
       v(20pt, weak: true)
@@ -245,7 +237,7 @@
 
   show figure.caption: c => [
     #context text(weight: "bold", size: 13pt)[
-    #c.supplement #c.counter.display(c.numbering)
+      #c.supplement #c.counter.display(c.numbering)
     ]
     #c.separator#c.body
     #v(0.4cm)
@@ -255,7 +247,7 @@
   show figure.where(kind: "algo"): set figure.caption(position: top)
 
   show raw.where(block: false): box.with(
-    fill:  luma(240), 
+    fill: luma(240),
     stroke: rgb(239, 240, 243),
     inset: (x: 3pt, y: 1pt),
     outset: (y: 3pt),
@@ -263,7 +255,7 @@
   )
 
   show: codly-init.with()
-  show raw.where(block: true, lang: "sh"): it => {
+  show raw.where( ): it => {
     codly(
       number-format: none,
       display-icon: false,
@@ -286,6 +278,19 @@
       languages: (python: (name: "Python", icon: "🐍 ", color: rgb("#CE412B"))),
     )
     it
+  }
+
+  show raw.where(block: true): it => {
+    set par(justify: false)
+    set text(
+      size: 10pt,
+      font: "JetBrains Mono",
+    )
+    grid(
+      columns: (100%, 100%),
+      column-gutter: -100%,
+      block(radius: 1em, fill: luma(246), width: 100%, inset: 1em, it),
+    )
   }
 
   // ============ MATH ==============
