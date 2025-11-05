@@ -194,7 +194,7 @@ Người dùng cũng có thể chạy Checkstyle trên một file cụ thể tha
 
 == Kết quả kiểm thử
 
-Sau khi chạy, Checkstyle sẽ phân tích toàn bộ file có đuôi `.java`, `.properties` và `.xml` (do cấu hình `fileExtensions` của `google_checks`) trong thư mục `src` của dự án Megabasterd, và ghi kết quả kiểm thử vào file `checkstyle-result.xml` (#link("https://raw.githubusercontent.com/pmint05/checkstyle-report/refs/heads/main/out/checkstyle-result.xml")[nội dung file]).
+Sau khi chạy, Checkstyle sẽ phân tích toàn bộ file có đuôi `.java`, `.properties` và `.xml` (do cấu hình `fileExtensions` của `google_checks`) trong thư mục `src` của dự án Megabasterd, và ghi kết quả kiểm thử vào file `checkstyle-result.xml` (#link("https://raw.githubusercontent.com/pmint05/checkstyle-report/refs/heads/main/out/checkstyle-result-full.xml")[nội dung file]).
 Dưới đây là một phần của file kết quả sau khi thực thi kiểm thử:
 
 #let result = read("/out/checkstyle-result.xml")
