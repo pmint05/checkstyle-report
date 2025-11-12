@@ -9,4 +9,5 @@
   + Determines multi-threading/parallelism configurations
   + Loads configurations (`Configuration` object) from config file
   + Delegates to `Main.getRootModule` to get a `RootModule` object that will control and run the main Checkstyle logic
+  + Creates an `AuditListener` object (an observer if the observer pattern) based on the input options, which will log running information to specified output path (stdout or a file on disk)
 + `RootModule.process`: implemented by `Checker.process`: filters files by extention, delegates to `FileSetCheck,process` to process each file, collects and returns violations
