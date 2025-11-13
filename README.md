@@ -113,8 +113,8 @@ Checkstyle implements a framework that enables declarative XML-based configurati
   + Tree Navigation - Parent
     + `getParent()`: Parent node in the tree
   + Search & Query
-    + findFirstToken(int type): Find first child/descendant with specific type
-    + branchContains(int type): Check if subtree contains token type (deprecated)
+    + `findFirstToken(type)`: Find first child/descendant with specific type
+    + `branchContains(type)`: Check if subtree contains token type (deprecated)
 + Example AST for `public class MyClass { private int field; }`:
 ```
 COMPILATION_UNIT
