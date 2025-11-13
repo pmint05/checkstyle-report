@@ -177,3 +177,24 @@ COMPILATION_UNIT
   + `processFiles()` delegates to `processFile()` for each individual file
   + `processFile()` invokes all checks
   + Collects all violations, lets listerners handle logging and returns
+```
+                                                                ┌────────────────┐       
+                                                                │                N       
+                                                                │                │       
+┌────────────┐                   ┌───────────────────────┐      │        ┌───────▼──────┐
+│ RootModule │                   │ AbstractAutomaticBean │      │        │ FileSetCheck │
+└─────^──────┘                   └────────────^──────────┘      │        └───────^──────┘
+      │                                       │                 │                │       
+      ├───────────────────────────────────────┤                 │                │       
+      │                                       │                 │                │       
+ ┌────┴─────┐                                 │                 │                │       
+ │ Checker  ├─1───────────────────────────────┼─────────────────┘                │       
+ └──────────┘                                 │                                  │       
+                                         ┌────┴───────┐                          │       
+                                         │ TreeWalker ├─────────────────┬────────┘       
+                                         └────────────┘                 N                
+                                                                        │                
+                                                                 ┌──────▼────────┐       
+                                                                 │ AbstractCheck │       
+                                                                 └───────────────┘
+```
