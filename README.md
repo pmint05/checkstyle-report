@@ -30,3 +30,10 @@ Checkstyle implements a framework that enables declarative XML-based configurati
     + Constructs objects based on XML config module name, which is `Configuration.getName()`
     + Searches classpath in addtion to built-in classes, which allows users add custom 3rd-party checks
     + Only handles object construction, doesn't populate those objects' fields, as that is handled by a different component
++ `AbstractAutomaticBean`:
+    + Superclass of the majority of relavant classes
+    + An `AbstractAutomaticBean` object is constructed dynamically with the use of `ModuleFactory`
+    + After construction, its fields are populated by calling `AbstractAutomaticBean.contextualize()` for shared/inherited properties, and `AbstractAutomaticBean.configure()` for its own properties
+    + `AbstractAutomaticBean.configure()` also make calls to `AbstractAutomaticBean.finishLocalSetup()` and `AbstractAutomaticBean.setupChild()`
+    + `AbstractAutomaticBean.finishLocalSetup()` allows subclasses provide post-construction logic, such as validation, setting up internal states, initializing resources, etc.
+    + `AbstractAutomaticBean.setupChild()` allows subclasses provide logic to process sub-modules, however, default behavior of this method is to forbid 
