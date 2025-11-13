@@ -96,6 +96,7 @@ Checkstyle implements a framework that enables declarative XML-based configurati
 
 ## `DetailAST`
 + Represent an Abstract Syntax Tree - the source code of a file in the form of a logical tree-like structure
++ Obtained via `JavaParser`
 + Each `DetailAST` object is a node of a tree that contains:
   + Node Identity & Position
     + `getType()`: Returns token type (e.g., `CLASS_DEF`, `METHOD_DEF`)
@@ -131,3 +132,30 @@ COMPILATION_UNIT
 │   │       │   └── LITERAL_INT
 │   │       └── IDENT "field"
 ```
+
+## `TreeWalker`
++ Checkstyle's core AST processing engine that transforms Java source code into structured events and feed them into specific individual checks.
++ `TreeWalker` acts as the conductor that:
+  + Parses Java files into ASTs
+  + Traverses AST trees depth-first
+  + Notifies registered checks at each node
+  + Collects and filters violations
+  + Manages check lifecycle
++ Extends `AbstractAutomaticBean` therefore can be configured according to XML config file at runtime
++ Post-construct - `finishLocalSetup()`: configure context with tab-with, severity, etc. to be passed to child modules
++ Child modules setup - `setupChild()`:
+  + Constructs child module
+  + `contextualize()` and `configure()` if child module is an instance of `AbstractAutomaticBean`
+  + Inits child module and `registerCheck()` if it is an instance of `AbstractCheck`
+  + Add child module to the list of filters if it is an instance of `TreeWalkerFilter`
++ Registers child check modules - `registerCheck(AbstractCheck check)`
+  + Gets the types of tokens, or in other words, AST nodes, this check is interested in
+  + Categorizes the check: does it need comment nodes or not
+  + Store the check based on the above data
++ Process file - `processFiltered()`:
+  + Generates AST
+  + Traverses it
++ AST traversion - `processIter()`:
+  + Traverses the AST depth-first non-recursively
+  + Notifies specific individual checks at every node
+  + Collects and returns all violations
