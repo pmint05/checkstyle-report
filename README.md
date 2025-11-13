@@ -1,7 +1,7 @@
 # Flow
 
 + Entry point: `Main.main`: parses CLI arguments, handles version & usage help requests, delegates to `Main.execute` for further logic
-+ `Main.execute`: finds target files and/or directories (files and/or directories to be checked), delegates to `Main.runCli`
++ `Main.execute`: finds target files (files to be checked), delegates to `Main.runCli`
 + `Main.runCli`: handles CLI options regarding the target files, delegates to `Main.runCheckstyle`
 + `Main.runCheckstyle`: loads XML config file (represented by a `Configuration` object) and runs `RootModule.process`
   + Loads properties (`Properties` object) from a properties file, or from system properties
@@ -91,3 +91,27 @@ Checkstyle implements a framework that enables declarative XML-based configurati
     + `AbstractAutomaticBean.configure()` also make calls to `AbstractAutomaticBean.finishLocalSetup()` and `AbstractAutomaticBean.setupChild()`
     + `AbstractAutomaticBean.finishLocalSetup()` allows subclasses provide post-construction logic, such as validation, setting up internal states, initializing resources, etc.
     + `AbstractAutomaticBean.setupChild()` allows subclasses provide logic to process sub-modules, however, default behavior of this method is to forbid, common subclass override is to construct sub-modules using `ModuleFactory`, `contextualize()` and `configure()` it, and add further logic depending on the sub-modules' actual instaces' types 
+
+# Relevant Components
+
+## `DetailAST`
++ Represent an Abstract Syntax Tree - the source code of a file in the form of a logical tree-like structure
++ Each `DetailAST` object is a node of a tree that contains:
+  + Node Identity & Position
+    + `getType()`: Returns token type (e.g., TokenTypes.CLASS_DEF, TokenTypes.METHOD_DEF)
+    + `getText()`: The actual text/identifier of the node
+    + `getLineNo()` / `getColumnNo()`: Source location for error reporting
+  + Tree Navigation - Children
+    + `getFirstChild()`: First direct child node
+    + `getLastChild()`: Last direct child node
+    + `getChildCount()`: Number of direct children
+    + `getChildCount(type)`: Count of children with specific token type
+    + `hasChildren()`: Whether node has any children
+  + Tree Navigation - Siblings
+    + `getNextSibling()`: Next node at same level
+    + `getPreviousSibling()`: Previous node at same level
+  + Tree Navigation - Parent
+    + `getParent()`: Parent node in the tree
+  + Search & Query
+    + findFirstToken(int type): Find first child/descendant with specific type
+    + branchContains(int type): Check if subtree contains token type (deprecated)
