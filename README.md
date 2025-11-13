@@ -90,4 +90,4 @@ Checkstyle implements a framework that enables declarative XML-based configurati
     + After construction, its fields are populated by calling `AbstractAutomaticBean.contextualize()` for shared/inherited properties, and `AbstractAutomaticBean.configure()` for its own properties
     + `AbstractAutomaticBean.configure()` also make calls to `AbstractAutomaticBean.finishLocalSetup()` and `AbstractAutomaticBean.setupChild()`
     + `AbstractAutomaticBean.finishLocalSetup()` allows subclasses provide post-construction logic, such as validation, setting up internal states, initializing resources, etc.
-    + `AbstractAutomaticBean.setupChild()` allows subclasses provide logic to process sub-modules, however, default behavior of this method is to forbid 
+    + `AbstractAutomaticBean.setupChild()` allows subclasses provide logic to process sub-modules, however, default behavior of this method is to forbid, common subclass override is to construct sub-modules using `ModuleFactory`, `contextualize()` and `configure()` it, and add further logic depending on the sub-modules' actual instaces' types 
