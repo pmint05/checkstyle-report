@@ -14,6 +14,60 @@
 + `Checker.process`: implements `RootModule.process`: filters files by extention, delegates to every `FileSetCheck.process` to process each file, collects and returns violations
 + `AbstractFileSetCheck.process`: implements `FileSetCheck.process`: sets up environment and parameters, filters target file extension and delegates to sub-class implementations of `AbstractFileSetCheck.processFiltered` for specific checks
 
+```
+         Entry           
+           │             
+           │             
+        ┌──▼───┐         
+        │ Main │         
+        └──1───┘         
+           │             
+           │             
+           │             
+        execute          
+           │             
+           │             
+         runCli          
+           │             
+           │             
+      runCheckstyle      
+           │             
+           │             
+           1             
+           │             
+      ┌────▼────┐        
+      │ Checker │        
+      └────1────┘        
+           │             
+           │             
+           │             
+        process          
+           │             
+           │             
+      processFiles       
+           │             
+           │             
+      processFile        
+           │             
+           │             
+           N             
+           │             
+┌──────────▼────────────┐
+│ AbstractFileSetCheck  │
+└──────────1────────────┘
+           │             
+           │             
+        process          
+           │             
+           │             
+     processFiltered     
+           │             
+           │             
+           1             
+           │             
+           ▼             
+         EXIT
+```
 
 # Framework
 Checkstyle implements a framework that enables declarative XML-based configurations, using reflection and runtime object construction.
