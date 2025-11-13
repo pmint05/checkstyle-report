@@ -141,6 +141,7 @@ COMPILATION_UNIT
   + Notifies registered checks at each node
   + Collects and filters violations
   + Manages check lifecycle
++ Extends `FileSetCheck`, therefore is a component that is responsible for checking a file, but can also have child checks that require AST
 + Extends `AbstractAutomaticBean` therefore can be configured according to XML config file at runtime
 + Post-construct - `finishLocalSetup()`: configure context with tab-with, severity, etc. to be passed to child modules
 + Child modules setup - `setupChild()`:
@@ -148,6 +149,7 @@ COMPILATION_UNIT
   + `contextualize()` and `configure()` if child module is an instance of `AbstractAutomaticBean`
   + Inits child module and `registerCheck()` if it is an instance of `AbstractCheck`
   + Add child module to the list of filters if it is an instance of `TreeWalkerFilter`
+  + Rejects all other types
 + Registers child check modules - `registerCheck(AbstractCheck check)`
   + Gets the types of tokens, or in other words, AST nodes, this check is interested in
   + Categorizes the check: does it need comment nodes or not
@@ -159,3 +161,19 @@ COMPILATION_UNIT
   + Traverses the AST depth-first non-recursively
   + Notifies specific individual checks at every node
   + Collects and returns all violations
+
+## `Checker`
++ Implements `RootModule`, making it the main processing component of the application
++ Extends `AbstractAutomaticBean` therefore can be configured according to XML config file at runtime
++ Post-construct - `finishLocalSetup()`: configure context with tab-with, severity, etc. to be passed to child modules
++ Child modules setup - `setupChild()`:
+  + Constructs child module
+  + `contextualize()` and `configure()` if child module is an instance of `AbstractAutomaticBean`
+  + Inits child module and `addFileSetCheck()` if it is an instance of `FileSetCheck`
+  + Add child module to the list of filters if it is a filter
+  + `addListener()` if child module is an instance of `AuditListener`
++ Main processing entry:
+  + `process()`
+  + `process()` delegates to `processFiles()`
+  + `processFiles()` delegates to `processFile()` for each individual file
+  + `processFile()` invokes all checks
