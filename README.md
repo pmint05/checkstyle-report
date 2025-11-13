@@ -172,8 +172,8 @@ COMPILATION_UNIT
   + Inits child module and `addFileSetCheck()` if it is an instance of `FileSetCheck`
   + Add child module to the list of filters if it is a filter
   + `addListener()` if child module is an instance of `AuditListener`
-+ Main processing entry:
-  + `process()`
++ Main processing entry - `process()`
   + `process()` delegates to `processFiles()`
   + `processFiles()` delegates to `processFile()` for each individual file
   + `processFile()` invokes all checks
+  + Collects all violations, lets listerners handle logging and returns
