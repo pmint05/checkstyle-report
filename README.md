@@ -98,7 +98,7 @@ Checkstyle implements a framework that enables declarative XML-based configurati
 + Represent an Abstract Syntax Tree - the source code of a file in the form of a logical tree-like structure
 + Each `DetailAST` object is a node of a tree that contains:
   + Node Identity & Position
-    + `getType()`: Returns token type (e.g., TokenTypes.CLASS_DEF, TokenTypes.METHOD_DEF)
+    + `getType()`: Returns token type (e.g., `CLASS_DEF`, `METHOD_DEF`)
     + `getText()`: The actual text/identifier of the node
     + `getLineNo()` / `getColumnNo()`: Source location for error reporting
   + Tree Navigation - Children
@@ -115,3 +115,19 @@ Checkstyle implements a framework that enables declarative XML-based configurati
   + Search & Query
     + findFirstToken(int type): Find first child/descendant with specific type
     + branchContains(int type): Check if subtree contains token type (deprecated)
++ Example AST for `public class MyClass { private int field; }`:
+```
+COMPILATION_UNIT
+├── CLASS_DEF "MyClass"
+│   ├── MODIFIERS
+│   │   └── LITERAL_PUBLIC
+│   ├── LITERAL_CLASS
+│   ├── IDENT "MyClass"
+│   ├── OBJBLOCK
+│   │   └── VARIABLE_DEF "field"
+│   │       ├── MODIFIERS
+│   │       │   └── LITERAL_PRIVATE
+│   │       ├── TYPE
+│   │       │   └── LITERAL_INT
+│   │       └── IDENT "field"
+```
