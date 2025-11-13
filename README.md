@@ -154,7 +154,7 @@ COMPILATION_UNIT
   + Store the check based on the above data
 + Process file - `processFiltered()`:
   + Generates AST
-  + Traverses it
+  + Traverses it twice, one with comments and one without
 + AST traversion - `processIter()`:
   + Traverses the AST depth-first non-recursively
   + Notifies specific individual checks at every node
