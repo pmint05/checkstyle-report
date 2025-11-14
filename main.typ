@@ -8,7 +8,7 @@
     (name: "Lê Minh Tuấn", id: "23020149"),
     (name: "Phạm Minh Thông", id: "23020164"),
   ),
-)
+) 
 
 // #include "src/05_bang_thuat_ngu.typ"
 

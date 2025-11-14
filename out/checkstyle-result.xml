@@ -3,7 +3,6 @@
 <file name="D:\CODE\Java\megabasterd\src\...\AboutDialog.java">
 <error line="10" column="1" severity="warning" message="'package' should be separated from previous line." source="com.puppycrawl.tools.checkstyle.checks.whitespace.EmptyLineSeparatorCheck"/>
 <error line="12" column="51" severity="warning" message="Using the '.*' form of import should be avoided - com.tonikelope.megabasterd.MainPanel.*." source="com.puppycrawl.tools.checkstyle.checks.imports.AvoidStarImportCheck"/>
-<error line="13" column="51" severity="warning" message="Using the '.*' form of import should be avoided - com.tonikelope.megabasterd.MiscTools.*." source="com.puppycrawl.tools.checkstyle.checks.imports.AvoidStarImportCheck"/>
 ...
 </file>
 <file name="D:\CODE\Java\megabasterd\src\...\ChunkDownloader.java">
@@ -25,5 +24,4 @@
 <error line="552" column="17" severity="warning" message="Abbreviation in name 'updateCBC' must contain no more than '1' consecutive capital letters." source="com.puppycrawl.tools.checkstyle.checks.naming.AbbreviationAsWordInNameCheck"/>
 ...
 </file>
-...
 </checkstyle>
