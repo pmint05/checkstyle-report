@@ -27,8 +27,6 @@ Ngôn ngữ phát triển chính: Java.
 
 === Tổng quan
 
-Overview, vẽ flow
-
 === Cây cấu hình
 
 Một cấu hình (Configuration) của Checkstyle quy định những module nào sẽ được sử dụng và áp dụng lên các tệp mã nguồn Java. Các module này được tổ chức theo dạng cây, trong đó gốc của cây luôn là module Checker. Dưới Checker là các nhóm module chính:
@@ -62,28 +60,14 @@ Với mỗi module, Checkstyle sẽ load các class được chỉ định trong
 
 === Cây cú pháp
 
-Phần lớn các module sử dụng để kiểm tra là module con của module `TreeWalker`. Module này thực hiện việc chuyển các file mã nguồn Java thành một cây cú pháp (Abstract Syntax Tree), sau đó 
-
-Một nút trên cây cú pháp được biểu diễn bằng lớp `DetailAST`, với cấu trúc như sau:
-- abcbacb
-
-
+Để công cụ hiểu được mã nguồn, công cụ lựa chọn sử dụng cây cú pháp (Abstract Syntax Tree) được dựng trực tiếp từ mã nguồn Java gốc. Một nút trên cây cú pháp được biểu diễn bằng lớp `DetailAST`, với cấu trúc như sau:
+- `getType()`: Loại của nút, ví dụ `CLASS_DEF` thể hiện định nghĩa của một class, hay `METHOD_DEF` thể hiện định nghĩa của một phương thức. Chi tiết về các loại được thể hiện trong lớp `TokenTypes`)
+- `getText()`: Tên hoặc ký hiệu liên quan tới node.
+- `getLineNo() / getColumnNo()`: Trả ra số dòng và vị trí trong dòng (đánh số từ 0), phục vụ cho việc tìm lỗi.
+- Các thông tin liên quan đến cha/con trực tiếp của đỉnh hiện tại.
 
 == Luồng hoạt động
 
-// Checkstyle hoạt động dựa trên bộ quy tắc cấu hình (thường ở dạng XML), tiêu biểu như Sun Code Conventions và Google Java Style.
 
-// Cấu trúc chính của Checkstyle:
-// - *File Set Checks:* Các module nhận tập hợp file đầu vào (.java) và kiểm tra phát hiện vi phạm (module quan trọng nhất: *TreeWalker*).  
-// - *Filters:* Lọc các sự kiện kiểm tra (audit events).  
-// - *Audit Listeners:* Báo cáo kết quả kiểm tra.
-
-// == Nguyên tắc hoạt động
-
-// 1. Người dùng cung cấp mã nguồn và file cấu hình.  
-// 2. Checkstyle phân tích mã nguồn thành cây cú pháp (AST).  
-// 3. Mỗi *check* được gọi khi TreeWalker duyệt qua các node tương ứng.  
-// 4. Khi phát hiện vi phạm, Checkstyle ghi lại lỗi.  
-// 5. Cuối cùng công cụ xuất báo cáo cho lập trình viên hoặc đưa vào quy trình CI/CD.
 
 #pagebreak()
