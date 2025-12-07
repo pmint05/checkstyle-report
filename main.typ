@@ -20,4 +20,3 @@
 #include "src/07_chuong_2.typ"
 #include "src/08_chuong_3.typ"
 #include "src/09_chuong_4.typ"
-#bibliography("ref.bib", style: "elsevier-vancouver")

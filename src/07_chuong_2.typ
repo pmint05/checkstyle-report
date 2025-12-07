@@ -7,73 +7,37 @@
 
 == Giới thiệu chung về Checkstyle
 
-== Luồng hoạt động
+*Checkstyle* là một công cụ phân tích mã tĩnh mã nguồn mở, được phát triển và thiết kế chuyên biệt cho ngôn ngữ Java. Công cụ này giúp lập trình viên viết mã Java tuân thủ tiêu chuẩn mã hóa trong phát triển phần mềm.
 
-_Vẽ lại flow trong README_
+Checkstyle có thể hoạt động trên nhiều nền tảng như Windows, macOS, Linux/Unix.  
+Ngôn ngữ phát triển chính: Java.
 
-== Kiến trúc
+*Mục đích sử dụng:*
+- *Thực thi tiêu chuẩn code:* Giúp lập trình viên viết mã Java tuân thủ theo các bộ quy tắc, ví dụ như Google Java Style hoặc Sun Code Conventions.  
+- *Tự động hóa kiểm tra style:* Giảm bớt công việc kiểm tra thủ công, tránh lỗi do con người.  
+- *Cải thiện chất lượng code:* Tăng tính nhất quán, dễ đọc, dễ bảo trì và tái sử dụng.  
+- *Phát hiện sớm lỗi:* Báo cáo vi phạm về định dạng, cấu trúc và thiết kế ngay trong quá trình phát triển hoặc build.
 
-== Thuật toán
+*Tính năng hỗ trợ:*
+- *Tích hợp CI/CD:* Tạo báo cáo vi phạm chi tiết, tích hợp cùng Jenkins, Maven, Gradle,…  
+- *Tiêu chuẩn & quy tắc mã hóa:* Kiểm tra dựa trên quy ước được cấu hình trước; hỗ trợ quy tắc tùy chỉnh.  
+- *Hỗ trợ plugin:* Tích hợp với Eclipse, IntelliJ IDEA, NetBeans; kiểm tra ngay khi lập trình viên viết code.
 
-=== Biểu diễn mã nguồn
+== Kiến trúc của công cụ
 
-Trước khi kiểm tra, thư viện sẽ biểu diễn mã nguồn dưới dạng Abstract Syntax Tree - cây biểu diễn cú pháp trừu tượng.
+Checkstyle hoạt động dựa trên bộ quy tắc cấu hình (thường ở dạng XML), tiêu biểu như Sun Code Conventions và Google Java Style.
 
-#figure(
-  image("../images/ast-01.png", width:50%),
-  caption: "Ví dụ "
-)
+Cấu trúc chính của Checkstyle:
+- *File Set Checks:* Các module nhận tập hợp file đầu vào (.java) và kiểm tra phát hiện vi phạm (module quan trọng nhất: *TreeWalker*).  
+- *Filters:* Lọc các sự kiện kiểm tra (audit events).  
+- *Audit Listeners:* Báo cáo kết quả kiểm tra.
 
-Một nút trên cây được biểu diễn bởi object `DetailAST` trong mã nguồn, với các thông tin:
-- Thông tin về dòng lệnh:
-  - getType(): Returns token type (e.g., CLASS_DEF, METHOD_DEF)
-  - getText(): The actual text/identifier of the node
-  - getLineNo() / getColumnNo(): Source location for error reporting
-- Thông tin về các nút liền kề:
-  - `getFirstChild()`: Nút con trực tiếp đầu tiên.
-  - `getLastChild()`: Nút con trực tiếp cuối cùng.
-  - `getChildCount()`: Số con trực tiếp.
-  - `getChildCount(type)`: Số con trực tiếp có `getType()` trùng với `type`.
-  - `hasChildren()`: Kiểm tra nút hiện tại có con trực tiếp không.
-  - `getNextSibling()`:
-  - `getPreviousSibling()`:
-  - `getParent()`: Cha trực tiếp của nút hiện tại.
-- Các phương thức hỗ trợ:
+== Nguyên tắc hoạt động
 
-
-_Cách JavaParser chuyển mã nguồn sang AST?_ 
-
-Ví dụ, một mã nguồn Java đơn giản
-
-```
-public class MyClass {
-  public int field;
-}
-```
-
-khi biểu diễn dưới dạng AST sẽ có dạng như sau:
-
-```
-(Vẽ lại cây bằng hình ảnh chứ không sử dụng các kí tự như này)
-COMPILATION_UNIT
-├── CLASS_DEF "MyClass"
-│   ├── MODIFIERS
-│   │   └── LITERAL_PUBLIC
-│   ├── LITERAL_CLASS
-│   ├── IDENT "MyClass"
-│   ├── OBJBLOCK
-│   │   └── VARIABLE_DEF "field"
-│   │       ├── MODIFIERS
-│   │       │   └── LITERAL_PRIVATE
-│   │       ├── TYPE
-│   │       │   └── LITERAL_INT
-│   │       └── IDENT "field"
-```
-
-=== Kiểm tra mã nguồn
-
-Phần lõi của thuật toán được cài đặt ở object `TreeWalker`. Cụ thể, object này sẽ thực hiện các việc chính sau:
-- Chuyển mã nguồn Java sang dạng cây cú pháp
-- Duyệt cây 
+1. Người dùng cung cấp mã nguồn và file cấu hình.  
+2. Checkstyle phân tích mã nguồn thành cây cú pháp (AST).  
+3. Mỗi *check* được gọi khi TreeWalker duyệt qua các node tương ứng.  
+4. Khi phát hiện vi phạm, Checkstyle ghi lại lỗi.  
+5. Cuối cùng công cụ xuất báo cáo cho lập trình viên hoặc đưa vào quy trình CI/CD.
 
 #pagebreak()
