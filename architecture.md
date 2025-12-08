@@ -1,4 +1,5 @@
 # Tổng quan
++ Trước khi xem qua luồng tổng quan, giải thích sơ qua 1 vài thành phần sau
 ## Cây cấu hình
 + Từ phần demo biết được để chạy app cần 1 file config XML
 + File config XML này được parse thành 1 cấu trúc dạng cây
@@ -37,12 +38,12 @@
      ▼             
  setupChild()
 ```
-+ Kết quả: Tùy biến được behavior của app bằng 1 file config XML
++ Kết quả: Tùy biến được cấu trúc và behavior của app bằng 1 file config XML
 
 ## Luồng tổng quan
 + Xác định các file cần kiểm tra
 + Tạo cây cấu hình từ file config XML
-+ Tạo các object cần thiết từ cây cấu hình, Checkstyle yêu cầu module gốc là `Checker`
++ Tạo các object cần thiết và cấu trúc app từ cây cấu hình, Checkstyle yêu cầu module gốc là `Checker`
 + Chạy `Checker.process()`, `Checker` bao gồm các `FileSetCheck` tương ứng với các tiêu chí cần kiểm thử, việc kiểm thử bắt đầu bằng `FileSetCheck.process()`
 ```
                        tao cay cau hinh                                            
@@ -59,3 +60,18 @@
           ▼                               ▼                                  ▼     
 FileSetCheck.process            FileSetCheck.process           FileSetCheck.process
 ```
+
+# Các tiêu chí kiểm thử nâng cao
++ Ngoài các tiêu chí kiểm thử đơn giản như regex hoặc text-based, Checkstyle cung cấp sẵn các tiêu chí kiểm thử phức tạp hơn
++ Các tiêu chí này hoạt động dựa vào việc parse file src code thành Abstract Synstax Tree
++ Xem qua các thành phần sau
+
+## DetailAST
++ Thể hiện cấu trúc src code dưới dạng cây
++ Mỗi object `DetailAST` tương ứng với 1 token trong src code, chứa thông tin về token đó, anh chị em (siblings), các nút con và nút cha
+
+## TreeWalker
++ Implement `FileSetCheck`, tức là 1 module tiêu chí kiểm thử
++ Là tiêu chí dựa trên AST, tức là tiêu chí phức tạp nhất (như đã nói ở trên)
++ Về bản chất, module này bao gồm nhiều module con kiểu `AbstractCheck` - các tiêu chí kiểm thử dành riêng cho AST
++ Luồng hoạt động của `TreeWalker`: parse từng file src code thành AST, và dẫn dắt các `AbstractCheck` thăm AST đó theo chiều sâu
