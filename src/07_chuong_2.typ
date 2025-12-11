@@ -25,8 +25,6 @@ Ngôn ngữ phát triển chính: Java.
 
 == Kiến trúc
 
-=== Tổng quan
-
 === Cây cấu hình
 
 Một cấu hình (Configuration) của Checkstyle quy định những module nào sẽ được sử dụng và áp dụng lên các tệp mã nguồn Java. Các module này được tổ chức theo dạng cây, trong đó gốc của cây luôn là module Checker. Dưới Checker là các nhóm module chính:
@@ -60,14 +58,22 @@ Với mỗi module, Checkstyle sẽ load các class được chỉ định trong
 
 === Cây cú pháp
 
-Để công cụ hiểu được mã nguồn, công cụ lựa chọn sử dụng cây cú pháp (Abstract Syntax Tree) được dựng trực tiếp từ mã nguồn Java gốc. Một nút trên cây cú pháp được biểu diễn bằng lớp `DetailAST`, với cấu trúc như sau:
+Để kiểm tra mã nguồn, hầu hết các tiêu chí lựa chọn sử dụng cây cú pháp (Abstract Syntax Tree) được dựng trực tiếp từ mã nguồn Java gốc. Một nút trên cây cú pháp được biểu diễn bằng lớp `DetailAST`, với cấu trúc như sau:
 - `getType()`: Loại của nút, ví dụ `CLASS_DEF` thể hiện định nghĩa của một class, hay `METHOD_DEF` thể hiện định nghĩa của một phương thức. Chi tiết về các loại được thể hiện trong lớp `TokenTypes`)
 - `getText()`: Tên hoặc ký hiệu liên quan tới node.
 - `getLineNo() / getColumnNo()`: Trả ra số dòng và vị trí trong dòng (đánh số từ 0), phục vụ cho việc tìm lỗi.
 - Các thông tin liên quan đến cha/con trực tiếp của đỉnh hiện tại.
 
-== Luồng hoạt động
+=== TreeWalker
 
+Đầu tiên, lớp này tiến hành chuyển mã nguồn Java sang dạng cây sử dụng lớp `JavaParser`, trong đó sử dụng mã nguồn của ANTLR, một công cụ mã nguồn mở dùng để phân tích cú pháp.
 
+Sau khi có được cấu trúc cây, tiến hành duyệt cây theo phương pháp DFS khử đệ quy. Khi bắt đầu thăm một nút, ta gọi hàm `visitToken()` của tất cả các check được định nghĩa một cách tuần tự để kiểm tra các điều kiện. Bên cạnh những điều kiện có thể kiểm tra trực tiếp, còn có những điều kiện cần phải biết hết thông tin của cây con để kiểm tra kết quả (ví dụ như độ dài phương thức, hay độ phủ của các biến), nên sau khi thăm toàn bộ cây con gốc $u$, ta cần phải gọi hàm `leaveToken()` của tất cả các check để đảm bảo tất cả điều kiện đã được kiểm tra.
+
+Cuối cùng, các vi phạm được tổng hợp và gửi lại cho Checker, thành phần chịu trách nhiệm thu thập và xuất kết quả đầu ra.
+
+=== Các loại kiểm tra khác
+
+Ngoài ra, một số loại kiểm tra có thể không cần dùng đến cây cấu trúc mà có thể kiểm tra trực tiếp trên mã nguồn gốc (ví dụ như kiểm tra độ dài của phương thức, hay của file...). Các lớp thể hiện các tiêu chí kiểm tra như vậy được kế thừa từ lớp `AbstractFileSetCheck` (trừ lớp `TreeWalker`).
 
 #pagebreak()
