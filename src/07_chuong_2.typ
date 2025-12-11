@@ -25,8 +25,6 @@ Ngôn ngữ phát triển chính: Java.
 
 == Kiến trúc
 
-=== Tổng quan
-
 === Cây cấu hình
 
 Một cấu hình (Configuration) của Checkstyle quy định những module nào sẽ được sử dụng và áp dụng lên các tệp mã nguồn Java. Các module này được tổ chức theo dạng cây, trong đó gốc của cây luôn là module Checker. Dưới Checker là các nhóm module chính:
@@ -65,67 +63,6 @@ Với mỗi module, Checkstyle sẽ load các class được chỉ định trong
 - `getText()`: Tên hoặc ký hiệu liên quan tới node.
 - `getLineNo() / getColumnNo()`: Trả ra số dòng và vị trí trong dòng (đánh số từ 0), phục vụ cho việc tìm lỗi.
 - Các thông tin liên quan đến cha/con trực tiếp của đỉnh hiện tại.
-
-== Luồng hoạt động
-
-=== Tổng quan
-
-Vẽ lại hình:
-
-```
-         Entry           
-           │             
-           │             
-        ┌──▼───┐         
-        │ Main │         
-        └──1───┘         
-           │             
-           │             
-           │             
-        execute          
-           │             
-           │             
-         runCli          
-           │             
-           │             
-      runCheckstyle      
-           │             
-           │             
-           1             
-           │             
-      ┌────▼────┐        
-      │ Checker │        
-      └────1────┘        
-           │             
-           │             
-           │             
-        process          
-           │             
-           │             
-      processFiles       
-           │             
-           │             
-      processFile        
-           │             
-           │             
-           N             
-           │             
-┌──────────▼────────────┐
-│ AbstractFileSetCheck  │
-└──────────1────────────┘
-           │             
-           │             
-        process          
-           │             
-           │             
-     processFiltered     
-           │             
-           │             
-           1             
-           │             
-           ▼             
-         EXIT
-```
 
 === TreeWalker
 
