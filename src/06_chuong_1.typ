@@ -8,7 +8,7 @@
 
 Trong thời đại phát triển nhanh chóng của công nghệ thông tin, chất lượng phần mềm là một yếu tố quyết định đến sự thành công của các dự án phát triển. Tuy nhiên, việc duy trì tiêu chuẩn mã hóa và đảm bảo mã nguồn tuân thủ các quy tắc thiết lập là một thách thức lớn, đặc biệt khi các đội phát triển có nhiều thành viên với các thói quen lập trình khác nhau.
 
-=== Bối cảnh:
+=== Bối cảnh
 
 Ngôn ngữ lập trình Java là một trong những ngôn ngữ phổ biến nhất hiện nay, được sử dụng rộng rãi trong phát triển các ứng dụng doanh nghiệp, hệ thống Backend, và các dự án mã nguồn mở quy mô lớn. Tuy nhiên, Java cũng là ngôn ngữ có tính linh hoạt cao, cho phép các lập trình viên viết code theo nhiều cách khác nhau. Điều này dẫn đến:
 
@@ -19,7 +19,7 @@ Ngôn ngữ lập trình Java là một trong những ngôn ngữ phổ biến n
 
 Để giải quyết những vấn đề trên, các công cụ phân tích mã tĩnh (static code analysis tools) như Checkstyle, SpotBugs, PMD, v.v. đã được phát triển. Trong đó, *Checkstyle* là một công cụ chuyên biệt dành riêng cho ngôn ngữ Java, giúp lập trình viên tự động hóa quá trình kiểm tra và thực thi các tiêu chuẩn mã hóa.
 
-=== Lý do chọn đề tài:
+=== Lý do chọn đề tài
 
 Nhóm chọn Checkstyle làm chủ đề của báo cáo vì những lý do sau:
 
