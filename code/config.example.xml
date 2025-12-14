@@ -7,6 +7,7 @@
   <property name="severity" value="${org.checkstyle.google.severity}" default="warning"/>
   <module name="TreeWalker">
     <property name="tabWidth" value="4"/>
+    <module name="AvoidStarImport"/>
     ...
   </module>
 </module>
