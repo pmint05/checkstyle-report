@@ -30,9 +30,9 @@ Kiến trúc của Checkstyle được thiết kế dựa trên sự kết hợp
 === Cây cấu hình
 
 Một cấu hình (Configuration) của Checkstyle quy định những module nào sẽ được sử dụng và áp dụng lên các tệp mã nguồn Java. Các module này được tổ chức theo dạng cây, trong đó gốc của cây luôn là module Checker. Dưới Checker là các nhóm module chính:
-- File Set Checks: Các module sử dụng để kiểm tra các vi phạm từ các file đầu vào.
-- Filters: các module dùng để lọc các sự kiện kiểm tra (audit events), từ đó quyết định các yêu cầu có được chấp nhận hay bị loại bỏ.
-- Audit Listeners: các module nhận và báo cáo các sự kiện sau khi đã được kiểm duyệt.
+- File Set Checks
+- Filters
+- Audit Listeners
 
 Khi sử dụng Checkstyle để tiến hành kiểm thử, người dùng cần chỉ định một tập tin XML, trong đó các phần tử thể hiện cấu trúc cây module của cấu hình, các module được bật, và các thuộc tính được thiết lập cho từng module.
 
@@ -70,14 +70,6 @@ Với mỗi module, Checkstyle sẽ load các class được chỉ định trong
 
 Để điều chỉnh các hành vi của một module, ta có thể dùng thẻ `<properties>` với các trường `name` và `value`. Ví dụ, trong đoạn code trên, ta quy định độ rộng của một kí tự tab là 4 cho module `TreeWalker` cùng tất cả các module con của nó.
 
-=== Cây cú pháp
-
-Để kiểm tra mã nguồn, hầu hết các tiêu chí lựa chọn sử dụng cây cú pháp (Abstract Syntax Tree) được dựng trực tiếp từ mã nguồn Java gốc. Một nút trên cây cú pháp được biểu diễn bằng lớp `DetailAST`, với cấu trúc như sau:
-- `getType()`: Loại của nút, ví dụ `CLASS_DEF` thể hiện định nghĩa của một class, hay `METHOD_DEF` thể hiện định nghĩa của một phương thức. Chi tiết về các loại được thể hiện trong lớp `TokenTypes`)
-- `getText()`: Tên hoặc ký hiệu liên quan tới node.
-- `getLineNo() / getColumnNo()`: Trả ra số dòng và vị trí trong dòng (đánh số từ 0), phục vụ cho việc tìm lỗi.
-- Các thông tin liên quan đến cha/con trực tiếp của đỉnh hiện tại.
-
 === Checker - Thành phần điều phối trung tâm
 
 `Checker` như là "container" trong hệ thống phân cấp xử lý. Đây là thành phần chịu trách nhiệm quản lý vòng đời của quá trình kiểm tra và duy trì danh sách các module con.
@@ -86,13 +78,21 @@ Với mỗi module, Checkstyle sẽ load các class được chỉ định trong
 -   _Input:_ Danh sách các file mã nguồn và đối tượng cấu hình.
 -   _Output:_ Các `AuditEvent` được đẩy tới các Listener.
 
-=== FileSetCheck và TreeWalker
-
-`FileSetCheck` là một giao diện trừu tượng đại diện cho bất kỳ module nào có khả năng xử lý một tập hợp các tệp tin. Trong bối cảnh kiểm tra mã nguồn Java, hiện thực quan trọng nhất của giao diện này là `TreeWalker`.
+=== FileSetCheck và TreeWalker 
+ 
+`FileSetCheck` là một giao diện trừu tượng đại diện cho bất kỳ module nào có khả năng xử lý một tập hợp các tệp tin. Trong bối cảnh kiểm tra mã nguồn Java, lớp triển khai quan trọng nhất của giao diện này là `TreeWalker`.
 
 -   _TreeWalker:_ Là "trái tim" của quá trình phân tích cú pháp. Nó chịu trách nhiệm chuyển đổi nội dung văn bản thô thành cấu trúc dữ liệu có thể truy vấn được (AST). `TreeWalker` đóng vai trò là container chứa các quy tắc kiểm tra (`Check`).
 -   _Input:_ Đối tượng `FileText` (đại diện cho nội dung tệp tin và bản đồ dòng/cột).
 -   _Output:_ Cấu trúc cây `DetailAST` cung cấp cho các `Check` và các sự kiện vi phạm phát sinh trong quá trình duyệt cây.
+
+=== Cây cú pháp
+
+Để kiểm tra mã nguồn, hầu hết các tiêu chí lựa chọn sử dụng cây cú pháp (Abstract Syntax Tree) được dựng trực tiếp từ mã nguồn Java gốc. Một nút trên cây cú pháp được biểu diễn bằng lớp `DetailAST`, với cấu trúc như sau:
+- `getType()`: Loại của nút, ví dụ `CLASS_DEF` thể hiện định nghĩa của một class, hay `METHOD_DEF` thể hiện định nghĩa của một phương thức. Chi tiết về các loại được thể hiện trong lớp `TokenTypes`)
+- `getText()`: Tên hoặc ký hiệu liên quan tới node.
+- `getLineNo() / getColumnNo()`: Trả ra số dòng và vị trí trong dòng (đánh số từ 0), phục vụ cho việc tìm lỗi.
+- Các thông tin liên quan đến cha/con trực tiếp của đỉnh hiện tại.
 
 === Check
 
@@ -102,13 +102,25 @@ Với mỗi module, Checkstyle sẽ load các class được chỉ định trong
 -   _Input:_ Nút hiện tại của cây `DetailAST` đang được duyệt.
 -   _Output:_ Các vi phạm (nếu có) được đóng gói và gửi ngược lại `TreeWalker` để xử lý.
 
-=== Filter
+=== Filter Systems
 
-`Filter` đóng vai trò như các chốt kiểm soát (gatekeeper) trong luồng sự kiện.
+Checkstyle áp dụng chiến lược lọc hai lớp (Two-layer Filtering) can thiệp vào cả đầu vào và đầu ra của quy trình. Điều này đảm bảo tính hiệu quả về hiệu năng và sự linh hoạt trong quản lý kết quả.
 
--   _Vai trò:_ Quyết định xem một `AuditEvent` có nên được chuyển tới `AuditListener` hay không. Thành phần này cho phép người dùng bỏ qua các lỗi tại các tệp nhất định hoặc các dòng mã cụ thể (ví dụ: `SuppressionFilter` dùng để bỏ qua các cảnh báo).
--   _Input:_ `AuditEvent`.
--   _Output:_ `boolean` (chấp nhận hoặc từ chối sự kiện).
+- _Before Execution File Filter (Bộ lọc tệp trước thực thi)_
+
+	Đây là chốt chặn đầu tiên trong pipeline xử lý, hoạt động ngay sau khi `Checker` nhận danh sách tệp nhưng trước khi chuyển giao cho `FileSetCheck` hay `TreeWalker`.
+
+	-   _Vai trò:_ Đóng vai trò tối ưu hóa hiệu năng bằng cách loại bỏ các tệp không phù hợp khỏi quy trình phân tích cú pháp tốn kém. Thành phần này thường được dùng để loại bỏ các tệp mã nguồn được sinh tự động (generated code), các thư mục tài nguyên, hoặc các tệp không phải Java dựa trên tên hoặc đường dẫn.
+	-   _Input:_ Chuỗi ký tự đại diện cho đường dẫn hoặc tên tệp tin (File path/URI).
+	-   _Output:_ `boolean` (Chấp nhận đưa vào xử lý hoặc bỏ qua ngay lập tức).
+
+- _Audit Filter (Bộ lọc sự kiện)_
+
+	Thành phần này hoạt động ở cuối quy trình logic, đóng vai trò như các chốt kiểm soát (gatekeeper) đối với luồng thông tin đầu ra.
+
+	-   _Vai trò:_ Quyết định xem một sự kiện vi phạm (`AuditEvent`) đã được các `Check` phát hiện có nên được chuyển tới `AuditListener` để báo cáo hay không. Thành phần này cho phép người dùng cấu hình các ngoại lệ logic, ví dụ: bỏ qua lỗi dựa trên chú thích `@SuppressWarnings` trong mã nguồn (nhờ `SuppressionFilter`) hoặc lọc lỗi theo mức độ nghiêm trọng (Severity).
+	-   _Input:_ Đối tượng `AuditEvent` (chứa đầy đủ thông tin về lỗi, vị trí, module phát hiện).
+	-   _Output:_ `boolean` (Chấp nhận sự kiện hoặc từ chối/hủy bỏ sự kiện).
 
 === AuditListener
 
@@ -132,7 +144,7 @@ Quá trình vận hành của Checkstyle có thể được khái quát hóa nh�
   caption: "Luồng hoạt động của Checkstyle",
 )
 
-Khi ứng dụng được khởi chạy, Checkstyle trước tiên sẽ xây dựng một hệ thống phân cấp các module (Module Hierarchy) thông qua cơ chế Reflection, biến các định nghĩa trong tệp cấu hình XML thành các đối tượng Java sống. Sau khi hệ thống đã sẵn sàng, `Checker` sẽ tiếp nhận danh sách các tệp mã nguồn cần kiểm tra. Tại đây, luồng dữ liệu được chia tách: các tệp tin lần lượt được đưa qua các Filters để loại bỏ những tệp không cần thiết, sau đó được chuyển tiếp đến các `FileSetChecks`.
+Khi ứng dụng được khởi chạy, Checkstyle trước tiên sẽ xây dựng một hệ thống phân cấp các module (Module Hierarchy) thông qua cơ chế Reflection, biến các định nghĩa trong tệp cấu hình XML thành các đối tượng Java. Sau khi hệ thống đã sẵn sàng, `Checker` sẽ tiếp nhận danh sách các tệp mã nguồn cần kiểm tra. Tại đây, luồng dữ liệu được chia tách: các tệp tin lần lượt được đưa qua các Filters để loại bỏ những tệp không cần thiết, sau đó được chuyển tiếp đến các `FileSetChecks`.
 
 Trong các bộ kiểm tra này, quá trình phân tích được chia làm hai nhánh chính: phân tích dựa trên văn bản thô (Raw Text Analysis) và phân tích dựa trên cây cú pháp trừu tượng (AST Analysis) thông qua `TreeWalker`. Các vi phạm (Violations) phát hiện được trong quá trình này sẽ được đóng gói thành các sự kiện và gửi ngược lại cho hệ thống lắng nghe (`AuditListeners`) để định dạng và ghi ra kết quả cuối cùng. Toàn bộ quy trình này đảm bảo tính toàn vẹn của dữ liệu và khả năng mở rộng, cho phép nhiều loại kiểm tra diễn ra song song hoặc tuần tự mà không gây xung đột trạng thái.
 
@@ -146,17 +158,20 @@ Trong các bộ kiểm tra này, quá trình phân tích được chia làm hai 
 
   Cấu trúc đối tượng được tạo ra phản ánh đúng cấu trúc phân cấp trong tệp XML: `Checker` nằm ở đỉnh, chứa các `FileSetCheck` (như `TreeWalker`) và `AuditListener`. Trong giai đoạn này, các phương thức setter của từng module được gọi tự động để nạp các thuộc tính (properties) tùy chỉnh của người dùng (như độ dài thụt dòng, quy tắc đặt tên) vào trong ngữ cảnh thực thi của từng đối tượng kiểm tra (Check).
 
-+ _Điều phối kiểm tra mã nguồn_
++ _Sàng lọc và điều phối kiểm tra mã nguồn_
 
-  Sau khi khởi tạo, quyền điều khiển thuộc về `Checker`. Thành phần này không trực tiếp phân tích mã nguồn mà đóng vai trò là nhạc trưởng điều phối. `Checker` duy trì một danh sách các `FileSetCheck` và các `Filter`.
+  Sau khi khởi tạo, quyền điều khiển thuộc về `Checker`. Thành phần này không trực tiếp phân tích mã nguồn mà đóng vai trò là nhạc trưởng điều phối. `Checker` duy trì một danh sách các `FileSetCheck` và các `Filter`. `Checker` không lập tức đọc nội dung toàn bộ tệp mà thực hiện một bước tối ưu hóa quan trọng đầu tiên là lọc tệp trước thực thi (Before Execution File Filtering).
 
-  Với mỗi tệp tin đầu vào, `Checker` trước tiên chuẩn bị một đối tượng `FileText`. Đối tượng này không chỉ chứa nội dung văn bản thuần túy mà còn xây dựng một bản đồ ánh xạ (mapping) giữa chỉ số ký tự và tọa độ dòng/cột. Điều này rất quan trọng để khi phát hiện lỗi, hệ thống có thể chỉ ra chính xác vị trí dòng và cột cho người dùng. Sau đó, `Checker` gọi phương thức `process()` của từng `FileSetCheck` đã đăng ký, chuyển giao đối tượng `FileText` để xử lý tiếp. Cơ chế này tách biệt hoàn toàn việc quản lý danh sách tệp khỏi logic kiểm tra cụ thể.
+  Với mỗi đường dẫn tệp tin trong danh sách đầu vào, `Checker` sẽ đưa nó qua một chuỗi các `BeforeExecutionFileFilter`. Tại đây, các logic loại trừ được áp dụng dựa trên tên tệp hoặc đường dẫn (ví dụ: bỏ qua các tệp trong thư mục `target`, tệp cấu hình không phải Java, hoặc mã nguồn được sinh tự động). Nếu một tệp bị từ chối bởi bất kỳ bộ lọc nào, nó sẽ bị loại bỏ ngay lập tức khỏi luồng xử lý, giúp tiết kiệm đáng kể tài nguyên I/O và CPU.
+
+
+  Sau khi đã sàng lọc, với mỗi tệp đầu vào, `Checker` xử lý tiếp bằng cách khởi tạo đối tượng `FileText`. Đối tượng này không chỉ chứa nội dung văn bản thuần túy mà còn xây dựng một bản đồ ánh xạ (mapping) giữa chỉ số ký tự và tọa độ dòng/cột. Điều này rất quan trọng để khi phát hiện lỗi, hệ thống có thể chỉ ra chính xác vị trí dòng và cột cho người dùng. Sau đó, `Checker` gọi phương thức `process()` của từng `FileSetCheck` đã đăng ký, chuyển giao đối tượng `FileText` để xử lý tiếp. Cơ chế này tách biệt hoàn toàn việc quản lý danh sách tệp khỏi logic kiểm tra cụ thể.
 
 + _Phân tích cú pháp và Duyệt cây_
 
-  Đây là giai đoạn phức tạp và quan trọng nhất, nơi phần lớn các quy tắc (Checks) được thực thi. `TreeWalker`, một implemetation của `FileSetCheck`, chịu trách nhiệm chuyển đổi văn bản thô thành cấu trúc ngữ nghĩa để phân tích.
+  Đây là giai đoạn phức tạp và quan trọng nhất, nơi phần lớn các quy tắc (Checks) được thực thi. `TreeWalker` chịu trách nhiệm chuyển đổi văn bản thô thành cấu trúc ngữ nghĩa để phân tích.
 
-  Đầu tiên, `TreeWalker` sử dụng lớp `JavaParser` (được xây dựng dựa trên ANTLR) để phân tích `FileText`. Quá trình này bao gồm việc Tokenizer (Lexer) chia văn bản thành các token, sau đó Parser sắp xếp chúng thành một AST. Các nút trong cây này là một implementation của interface `DetailAST`, chứa thông tin về loại token, vị trí dòng/cột, và các liên kết đến nút cha, nút con đầu tiên (first child) và nút anh em kế tiếp (next sibling).
+  Đầu tiên, `TreeWalker` sử dụng lớp `JavaParser` (được xây dựng dựa trên ANTLR) để phân tích `FileText`. Quá trình này bao gồm việc Tokenizer (Lexer) chia văn bản thành các token, sau đó Parser sắp xếp chúng thành một AST. Các nút trong cây này là lớp triển khai của giao diện `DetailAST`, chứa thông tin về loại token, vị trí dòng/cột, và các liên kết đến nút cha, nút con đầu tiên (first child) và nút anh em kế tiếp (next sibling).
 
   Sau khi có được cấu trúc cây, `TreeWalker` tiến hành duyệt cây theo phương pháp DFS (Depth-First Search) khử đệ quy hoặc đệ quy tùy, đảm bảo mọi nút đều được ghé thăm. Tại mỗi nút của cây (tương ứng với một cấu trúc ngữ pháp như `METHOD_DEF`, `VARIABLE_DEF`), `TreeWalker` đóng vai trò như một bộ phát sự kiện (Event Dispatcher):
 
@@ -173,6 +188,8 @@ Trong các bộ kiểm tra này, quá trình phân tích được chia làm hai 
 
   Sự kiện này được đẩy ngược lên `TreeWalker`, sau đó chuyển tiếp về `Checker`. Tại đây, `Checker` sử dụng một danh sách các `Filter` để quyết định xem sự kiện này có nên được chấp nhận hay không (ví dụ: `SuppressionFilter` có thể loại bỏ lỗi dựa trên chú thích `@SuppressWarnings`).
 
-  Nếu sự kiện vượt qua các bộ lọc, `Checker` sẽ gửi nó đến tất cả các `AuditListener` đã đăng ký. Các Listener này (như `DefaultLogger`, `XMLLogger`) chịu trách nhiệm định dạng dữ liệu sự kiện thành văn bản hoặc XML và ghi ra luồng đầu ra (OutputStream) hoặc tệp kết quả. Việc tách biệt khâu phát hiện lỗi (Detection) và khâu báo cáo (Reporting) tuân thủ nguyên lý Single Responsibility, cho phép Checkstyle dễ dàng tích hợp với các hệ thống CI/CD hoặc IDE khác nhau mà không cần sửa đổi logic cốt lõi.
+  Nếu sự kiện vượt qua các bộ lọc, `Checker` sẽ gửi nó đến tất cả các `AuditListener` đã đăng ký. Các Listener này (như `DefaultLogger`, `XMLLogger`) chịu trách nhiệm định dạng dữ liệu sự kiện thành văn bản hoặc XML và ghi ra luồng đầu ra (OutputStream) hoặc tệp kết quả. 
+  
+  Việc tách biệt khâu phát hiện lỗi (Detection) và khâu báo cáo (Reporting) tuân thủ nguyên lý _Single Responsibility_, cho phép Checkstyle dễ dàng tích hợp với các hệ thống CI/CD hoặc IDE khác nhau mà không cần sửa đổi logic cốt lõi.
 
 #pagebreak()

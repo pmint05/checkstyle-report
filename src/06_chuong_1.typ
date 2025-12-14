@@ -47,8 +47,8 @@ Trong báo cáo này, nhóm sẽ tìm hiểu về công cụ Checkstyle và các
 Để thực hiện đề tài này, nhóm đã áp dụng các phương pháp nghiên cứu sau:
 
 - Nghiên cứu tài liệu: Tìm hiểu từ các tài liệu chính thức của Checkstyle, các bài viết công bố khoa học, và các blog về công cụ này.
-- Phân tích thực nghiệm: Cài đặt và sử dụng Checkstyle trên một dự án Java thực tế (MegaBasterd) để kiểm tra mã nguồn và phân tích kết quả.
-- So sánh và đánh giá: So sánh các bộ quy tắc khác nhau (Google Checks, Sun Checks), so sánh giữa Checkstyle và các công cụ phân tích mã tĩnh khác như PMD, SpotBugs để đưa ra nhận xét và đánh giá.
+- Phân tích thực nghiệm: Cài đặt và sử dụng Checkstyle trên một dự án Java thực tế để kiểm tra mã nguồn và phân tích kết quả.
+- So sánh và đánh giá giữa Checkstyle và các công cụ phân tích mã tĩnh khác như PMD, SpotBugs để đưa ra nhận xét và đánh giá.
 
 == Kiến thức liên quan
 
@@ -56,6 +56,7 @@ Trong báo cáo này, nhóm sẽ tìm hiểu về công cụ Checkstyle và các
 - Code Convention (Quy ước mã hóa): Các quy tắc thống nhất về cách trình bày code, định dạng, đặt tên, v.v.
 - CI/CD (Continuous Integration/Continuous Deployment): Quy trình tự động hóa phát triển, kiểm thử, và triển khai phần mềm.
 - AST (Abstract Syntax Tree): Cấu trúc dữ liệu biểu diễn cấu trúc cú pháp của mã nguồn dưới dạng cây.
+- Single Responsibility Principle (Nguyên tắc trách nhiệm đơn): Một trong 5 nguyên tắc thiết kế phần mềm SOLID, yêu cầu mỗi module hoặc lớp chỉ nên có một lý do để thay đổi.
 
 == Cấu trúc của báo cáo
 Phần còn lại của báo cáo này được trình bày như sau:
