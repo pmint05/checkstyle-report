@@ -1,7 +1,7 @@
 #import "template.typ": *
 
 #show: project.with(
-  title: "Công cụ kiểm thử\nCheckStyle",
+  title: "Công cụ kiểm thử\nCheckstyle",
   authors: (
     (name: "Hoàng Hữu Đức", id: "23020046"),
     (name: "Nguyễn Nho Dương", id: "23020034"),
@@ -20,3 +20,4 @@
 #include "src/07_chuong_2.typ"
 #include "src/08_chuong_3.typ"
 #include "src/09_chuong_4.typ"
+#include "src/11_tai_lieu_tham_khao.typ"
