@@ -51,6 +51,7 @@
   counter(page).update(0)
   set page(numbering: "i")
   include "src/02_loi_cam_doan.typ"
+  include "src/01_mo_ta_dong_gop.typ"
   // include "src/03_loi_cam_on.typ"
   // include "src/04_tom_tat.typ"
 

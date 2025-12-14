@@ -4,11 +4,10 @@
   #set heading(numbering: "Chương 1.1")
   = Giới thiệu <chuong1>
 ]
-== Bối cảnh và lý do chọn đề tài
+
+== Bối cảnh
 
 Trong thời đại phát triển nhanh chóng của công nghệ thông tin, chất lượng phần mềm là một yếu tố quyết định đến sự thành công của các dự án phát triển. Tuy nhiên, việc duy trì tiêu chuẩn mã hóa và đảm bảo mã nguồn tuân thủ các quy tắc thiết lập là một thách thức lớn, đặc biệt khi các đội phát triển có nhiều thành viên với các thói quen lập trình khác nhau.
-
-=== Bối cảnh
 
 Ngôn ngữ lập trình Java là một trong những ngôn ngữ phổ biến nhất hiện nay, được sử dụng rộng rãi trong phát triển các ứng dụng doanh nghiệp, hệ thống Backend, và các dự án mã nguồn mở quy mô lớn. Tuy nhiên, Java cũng là ngôn ngữ có tính linh hoạt cao, cho phép các lập trình viên viết code theo nhiều cách khác nhau. Điều này dẫn đến:
 
@@ -19,48 +18,57 @@ Ngôn ngữ lập trình Java là một trong những ngôn ngữ phổ biến n
 
 Để giải quyết những vấn đề trên, các công cụ phân tích mã tĩnh (static code analysis tools) như Checkstyle, SpotBugs, PMD, v.v. đã được phát triển. Trong đó, *Checkstyle* là một công cụ chuyên biệt dành riêng cho ngôn ngữ Java, giúp lập trình viên tự động hóa quá trình kiểm tra và thực thi các tiêu chuẩn mã hóa.
 
-=== Lý do chọn đề tài
+== Lý do chọn đề tài
 
-Nhóm chọn Checkstyle làm chủ đề của báo cáo vì những lý do sau:
+Nhóm lựa chọn Checkstyle làm chủ đề của báo cáo vì công cụ này giúp phát hiện sớm các vi phạm về tiêu chuẩn mã hóa ngay trong quá trình phát triển, từ đó duy trì tính nhất quán của mã nguồn trước khi được tích hợp vào nhánh chính của dự án.
 
-1. Checkstyle là công cụ thiết yếu trong quy trình kiểm thử phần mềm, giúp phát hiện các vi phạm về tiêu chuẩn mã hóa từ sớm, trước khi code được merge vào nhánh chính.
+Bên cạnh đó, Checkstyle có khả năng tích hợp dễ dàng với các môi trường phát triển phổ biến như IntelliJ IDEA, Eclipse cũng như các hệ thống CI/CD như Jenkins, GitLab CI hay GitHub Actions, cho phép tự động hóa việc kiểm tra mã nguồn trong quá trình lập trình và review code.
 
-2. Công cụ này được sử dụng rộng rãi trong các dự án mã nguồn mở lớn như Apache, Eclipse, Maven, v.v. Việc hiểu rõ cách sử dụng Checkstyle sẽ giúp ích rất nhiều cho các lập trình viên trong quá trình phát triển chuyên nghiệp.
+Một lý do quan trọng khác là Checkstyle là công cụ miễn phí và mã nguồn mở, cho phép người dùng sử dụng, nghiên cứu và mở rộng mà không bị ràng buộc về chi phí hay bản quyền, đồng thời giúp người dùng dễ dàng tìm hiểu và nắm bắt cách thức hoạt động của công cụ.
 
-3. Checkstyle không chỉ giúp duy trì tính nhất quán của code, mà còn góp phần nâng cao chất lượng tổng thể của phần mềm, giảm thiểu lỗi tiềm ẩn, và cải thiện khả năng bảo trì.
+Ngoài ra, Checkstyle cho phép tùy chỉnh linh hoạt các quy tắc kiểm tra thông qua file cấu hình XML, giúp công cụ thích nghi với các tiêu chuẩn mã hóa khác nhau của từng tổ chức hoặc dự án.
 
-4. Checkstyle có thể được tích hợp dễ dàng vào các hệ thống CI/CD như Jenkins, GitLab CI, GitHub Actions, v.v. để tự động kiểm tra mã nguồn trong mỗi lần commit hoặc pull request.
+Nhờ những đặc điểm trên, Checkstyle góp phần nâng cao chất lượng tổng thể của mã nguồn, giảm bớt công sức kiểm tra thủ công và cải thiện khả năng bảo trì của phần mềm trong các dự án thực tế.
 
-5. Checkstyle cho phép người dùng tùy chỉnh các quy tắc kiểm thử thông qua file cấu hình XML, phù hợp với quy chuẩn khác nhau của từng tổ chức hay dự án.
+// Nhóm chọn Checkstyle làm chủ đề của báo cáo vì những lý do sau:
 
-== Mục tiêu nghiên cứu
+// 1. Checkstyle là công cụ thiết yếu trong quy trình kiểm thử phần mềm, giúp phát hiện các vi phạm về tiêu chuẩn mã hóa từ sớm, trước khi code được merge vào nhánh chính.
 
-Trong báo cáo này, nhóm sẽ tìm hiểu về công cụ Checkstyle và cách ứng dụng vào thực tiễn.
+// 2. Công cụ này được sử dụng rộng rãi trong các dự án mã nguồn mở lớn như Apache, Eclipse, Maven, v.v. Việc hiểu rõ cách sử dụng Checkstyle sẽ giúp ích rất nhiều cho các lập trình viên trong quá trình phát triển chuyên nghiệp.
 
-1. Tìm hiểu chi tiết về công cụ Checkstyle, bao gồm kiến trúc, nguyên tắc hoạt động, và các tính năng chính.
-2. Học cách cấu hình và sử dụng Checkstyle để kiểm tra mã nguồn Java.
-3. Áp dụng Checkstyle vào phân tích một dự án Java thực tế và đưa ra các đề xuất khắc phục.
-4. Rút ra những bài học và kinh nghiệm hữu ích về việc đảm bảo chất lượng phần mềm thông qua static code analysis.
+// 3. Checkstyle không chỉ giúp duy trì tính nhất quán của code, mà còn góp phần nâng cao chất lượng tổng thể của phần mềm, giảm thiểu lỗi tiềm ẩn, và cải thiện khả năng bảo trì.
 
-== Phương pháp nghiên cứu
+// 4. Checkstyle có thể được tích hợp dễ dàng vào các hệ thống CI/CD như Jenkins, GitLab CI, GitHub Actions, v.v. để tự động kiểm tra mã nguồn trong mỗi lần commit hoặc pull request.
 
-Để thực hiện đề tài này, nhóm đã áp dụng các phương pháp nghiên cứu sau:
+// 5. Checkstyle cho phép người dùng tùy chỉnh các quy tắc kiểm thử thông qua file cấu hình XML, phù hợp với quy chuẩn khác nhau của từng tổ chức hay dự án.
 
-- Nghiên cứu tài liệu: Tìm hiểu từ các tài liệu chính thức của Checkstyle, các bài viết công bố khoa học, và các blog về công cụ này.
-- Phân tích thực nghiệm: Cài đặt và sử dụng Checkstyle trên một dự án Java thực tế để kiểm tra mã nguồn và phân tích kết quả.
-- So sánh và đánh giá giữa Checkstyle và các công cụ phân tích mã tĩnh khác như PMD, SpotBugs để đưa ra nhận xét và đánh giá.
+// == Mục tiêu nghiên cứu
 
-== Kiến thức liên quan
+// Trong báo cáo này, nhóm sẽ tìm hiểu về công cụ Checkstyle và cách ứng dụng vào thực tiễn.
 
-- Static Code Analysis (Phân tích mã tĩnh): Một kỹ thuật kiểm tra mã nguồn mà không cần chạy chương trình.
-- Code Convention (Quy ước mã hóa): Các quy tắc thống nhất về cách trình bày code, định dạng, đặt tên, v.v.
-- CI/CD (Continuous Integration/Continuous Deployment): Quy trình tự động hóa phát triển, kiểm thử, và triển khai phần mềm.
-- AST (Abstract Syntax Tree): Cấu trúc dữ liệu biểu diễn cấu trúc cú pháp của mã nguồn dưới dạng cây.
-- Single Responsibility Principle (Nguyên tắc trách nhiệm đơn): Một trong 5 nguyên tắc thiết kế phần mềm SOLID, yêu cầu mỗi module hoặc lớp chỉ nên có một lý do để thay đổi.
+// 1. Tìm hiểu chi tiết về công cụ Checkstyle, bao gồm kiến trúc, nguyên tắc hoạt động, và các tính năng chính.
+// 2. Học cách cấu hình và sử dụng Checkstyle để kiểm tra mã nguồn Java.
+// 3. Áp dụng Checkstyle vào phân tích một dự án Java thực tế và đưa ra các đề xuất khắc phục.
+
+// == Phương pháp nghiên cứu
+
+// Để thực hiện đề tài này, nhóm đã áp dụng các phương pháp nghiên cứu sau:
+
+// - Nghiên cứu tài liệu: Tìm hiểu từ các tài liệu chính thức của Checkstyle, các bài viết công bố khoa học, và các blog về công cụ này.
+// - Phân tích thực nghiệm: Cài đặt và sử dụng Checkstyle trên một dự án Java thực tế để kiểm tra mã nguồn và phân tích kết quả.
+// - So sánh và đánh giá giữa Checkstyle và các công cụ phân tích mã tĩnh khác như PMD, SpotBugs để đưa ra nhận xét và đánh giá.
+
+// == Kiến thức liên quan
+
+// - Static Code Analysis (Phân tích mã tĩnh): Một kỹ thuật kiểm tra mã nguồn mà không cần chạy chương trình.
+// - Code Convention (Quy ước mã hóa): Các quy tắc thống nhất về cách trình bày code, định dạng, đặt tên, v.v.
+// - CI/CD (Continuous Integration/Continuous Deployment): Quy trình tự động hóa phát triển, kiểm thử, và triển khai phần mềm.
+// - AST (Abstract Syntax Tree): Cấu trúc dữ liệu biểu diễn cấu trúc cú pháp của mã nguồn dưới dạng cây.
+// - Single Responsibility Principle (Nguyên tắc trách nhiệm đơn): Một trong 5 nguyên tắc thiết kế phần mềm SOLID, yêu cầu mỗi module hoặc lớp chỉ nên có một lý do để thay đổi.
 
 == Cấu trúc của báo cáo
 Phần còn lại của báo cáo này được trình bày như sau:
-- @chuong2: Tổng quan về Checkstyle
-- @chuong3: Áp dụng Checkstyle phân tích dự án thực tế
-- @chuong4: Kết luận
+- @chuong2: Tìm hiểu chi tiết về công cụ Checkstyle, bao gồm kiến trúc, nguyên tắc hoạt động, và các tính năng chính.
+- @chuong3: Áp dụng Checkstyle vào phân tích một dự án Java thực tế và đưa ra các đề xuất khắc phục.
+- @chuong4: Đánh giá, kết luận.
 #pagebreak()
