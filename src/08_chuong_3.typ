@@ -178,8 +178,10 @@ Nhóm sẽ thử áp dụng cách thứ nhất để format lại mã nguồn d�
 
 Sau khi format lại mã nguồn và chạy lại Checkstyle, thu được #link("https://raw.githubusercontent.com/pmint05/checkstyle-report/refs/heads/main/out/checkstyle-result-recheck.xml")[file kết quả]. Sử dụng Plugin Checkstyle-IDEA để tổng quan hóa kết quả:
 #align(center)[
-  #image("/images/error-sumary-recheck.png", width: 60%)
-
+  #figure(
+    image("/images/error-sumary-recheck.png", width: 48%),
+    caption: "Tổng quan các lỗi vi phạm sau khi reformat mã nguồn",
+  )
 ]
 
 Có thể thấy số lượng vi phạm đã giảm đáng kể từ 23170 xuống còn 3640 vi phạm, trong đó lỗi _Indentation_ đã không còn xuất hiện nữa. Thay vào đó là các lỗi như _MemberName_ (685 vi phạm), _LocalVariableName_ (678 vi phạm), _MethodName_ (454 vi phạm),...
@@ -192,12 +194,45 @@ public abstract class APIException extends Exception {
   protected Integer _code;
 ...
 ```
-Tên biến `_code` không tuân thủ quy ước đặt tên của Google (sử dụng dấu gạch dưới ở đầu tên biến), có thể ý đồ của tác giả là để biểu thị đây là biến protected. Để khắc phục lỗi này, có thể đổi tên biến thành `code`.
+Tên biến `_code` không tuân thủ quy ước đặt tên của Google (sử dụng dấu gạch dưới ở đầu tên biến), có thể ý đồ của tác giả là để biểu thị đây là biến protected. Để khắc phục lỗi này, có thể đổi tên biến thành `code`. Hoặc sử dụng `annotation` báo cho Checkstyle bỏ qua kiểm tra:
 
-// Tuy nghiên phương án reformat code tự động có một số hạn chế như:
-// - Không thể khắc phục tất cả các lỗi vi phạm, đặc biệt là những lỗi liên quan đến logic hoặc thiết kế.
-// - Có thể làm thay đổi ý đồ ban đầu của tác giả, dẫn đến các lỗi tiềm ẩn khác.
-// - Cần kiểm tra kỹ lưỡng sau khi reformat để đảm bảo không có lỗi mới phát sinh.
-// - Tốn kém nếu dự án có quy mô lớn.
+```java
+...
+public abstract class APIException extends Exception {
+
+  @SuppressWarnings("MemberName")
+  protected Integer _code;
+...
+```
+
+\
+
+Tuy nhiên, phương án reformat code tự động có một số hạn chế. Nó không thể khắc phục tất cả các lỗi vi phạm, đặc biệt là những lỗi liên quan đến logic hoặc thiết kế của ứng dụng. Quá trình này có thể làm thay đổi ý đồ ban đầu của tác giả, dẫn đến các lỗi tiềm ẩn khác trong mã nguồn.
+
+Ngoài ra, cần phải kiểm tra kỹ lưỡng sau khi reformat để đảm bảo không có lỗi mới phát sinh và mã nguồn vẫn hoạt động đúng như dự kiến. Đối với các dự án có quy mô lớn, phương án này cũng tốn kém về thời gian và công sức để thực hiện và xác minh.
+
+Do đó, nhóm sẽ thử áp dụng phương án còn lại, nhưng thay vì sửa file cấu hình `google_checks.xml` gốc, nhóm sẽ tạo một file cấu hình mới dựa trên `google_checks.xml` và loại bỏ, chỉnh sửa các quy tắc không phù hợp với dự án MegaBasterd.
+
+File cấu hình mà nhóm đã viết (#link("https://raw.githubusercontent.com/pmint05/checkstyle-report/refs/heads/main/out/custom_checks.xml")[`custom_checks.xml`]) có những thay đổi chính sau:
+- Thụt lề 4 spaces cho mỗi cấp.
+- Giới hạn độ dài dòng tăng lên 120 ký tự và bỏ qua kiểm tra độ dài dòng cho package, import, và các URL.
+- Cho phép đặt tên biến, phương thức theo kiểu `camelCase` hoặc `snake_case`. 
+- Cho phép sử dụng dấu gạch dưới ở đầu tên biến, phương thức để biểu thị phạm vi truy cập `protected` hoặc `private`.
+- Giới hạn phạm vi loại file được kiểm tra chỉ còn các file `.java`.
+
+Sử dụng file cấu hình tùy chỉnh này để chạy lại Checkstyle trên mã nguồn dự án MegaBasterd, thu được #link("https://raw.githubusercontent.com/pmint05/checkstyle-report/refs/heads/main/out/checkstyle-result-custom_checks.xml")[file kết quả]. Dưới đây là tổng quan các lỗi vi phạm:
+
+#align(center)[
+  #figure(
+    image("/images/error-summary-custom_checks.png", width: 48%),
+    caption: "Tổng quan các lỗi vi phạm sau khi áp dụng file cấu hình tùy chỉnh",
+  )
+]
+
+So với kết quả ban đầu, số lượng vi phạm đã giảm đều ở tất cả các tiêu chí. Tổng số vi phạm chỉ còn 2247 vi phạm, trong đó lỗi _Indentation_ gần như không còn, _MemberName_ và _LocalVariableName_ đã giảm sâu.
+Tuy nhiên, lỗi _LineLength_ và _MemberName_ vẫn còn tương đối nhiều, qua kiểm tra mã nguồn cho thấy, các vi phạm này chủ yếu là do dự án sử dụng thư viện các hàm liên quan đến _Crypto_ có tên phương thức được đặt theo định dạng `snake_case`, và các hàm thường nối tiếp nhau khá dài, do đó khó để tuân thủ quy tắc đặt tên.
+
+Qua quá trình áp dụng Checkstyle để phân tích dự án MegaBasterd, nhóm đã thấy rõ tầm quan trọng và hiệu quả của công cụ này trong việc đảm bảo chất lượng mã nguồn. Bằng cách sử dụng các bộ quy tắc tiêu chuẩn hoặc tùy chỉnh, có thể phát hiện và theo dõi các vi phạm về phong cách code một cách tự động và hiệu quả. Nhóm nhận thấy Checkstyle không chỉ giúp xác định các vấn đề về định dạng và quy ước đặt tên, mà còn khuyến khích các đội phát triển duy trì tính nhất quán trong codebase. Mặc dù không phải tất cả các vi phạm đều cần sửa chữa ngay lập tức, nhưng việc có một cơ chế kiểm tra tự động giúp giảm bớt công sức code review thủ công và nâng cao hiệu suất trong quá trình phát triển.
+
 
 #pagebreak()

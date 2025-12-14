@@ -9,6 +9,8 @@
 
 Để thấy rõ hơn vị trí và vai trò của Checkstyle trong quy trình phát triển phần mềm, cần đặt công cụ này trong mối tương quan với các giải pháp phân tích mã nguồn phổ biến khác. Trong đó, SonarQube là một đại diện tiêu biểu nhờ khả năng phân tích chất lượng mã nguồn một cách toàn diện ở cấp độ dự án. Phần đánh giá dưới đây sẽ tập trung so sánh Checkstyle và SonarQube dựa trên các tiêu chí như mục đích sử dụng, phạm vi kiểm tra, cách thức triển khai và hiệu quả áp dụng trong thực tế, từ đó làm rõ ưu điểm, hạn chế cũng như bối cảnh phù hợp của từng công cụ.
 
+#show figure: set block(breakable: true)
+
 #figure(
   table(
     columns: 3,
@@ -16,7 +18,7 @@
     align: (left, left, left),
     [Mục đích], [Chủ yếu kiểm tra phong cách và quy ước mã nguồn.], [Kiểm tra chất lượng toàn diện của code, bao gồm lỗi, lỗ hổng bảo mật, khả năng bảo trì, độ bao phủ của bộ kiểm thử.],
     [Phạm vi], [Kiểm tra từng file riêng biệt.], [Kiểm tra toàn dự án như một thể thống nhất.],
-    [Tiêu chí], [Cách code được viết: naming convention, indentation, whitespaces, bracket placement, ...], [Tập trung vào hành vi và chất lượng thực thi của mã nguồn; phong cách viết mã không phải trọng tâm chính.],
+    [Đối tượng], [Cách code được viết: naming convention, indentation, whitespaces, bracket placement, ...], [Tập trung vào hành vi và chất lượng thực thi của mã nguồn; phong cách viết mã không phải trọng tâm chính.],
     [Ngôn ngữ hỗ trợ], [Java], [Nhiều ngôn ngữ],
     [Cách dùng], [Chỉ cần một file cấu hình XML, dùng như app CLI standalone, hoặc tích hợp vào IDE & build tool dưới dạng plugin.], [Cần server tập trung, dự án phải được cấu hình trên server.],
     [Độ phức tạp], [Nhẹ và nhanh, trả về kết quả kiểm thử ngay lập tức.], [Triển khai phức tạp hơn, yêu cầu hạ tầng server và thời gian phân tích dài hơn.],

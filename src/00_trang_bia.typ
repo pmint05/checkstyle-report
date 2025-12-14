@@ -17,7 +17,25 @@
         #align(center)[
           #image("/images/UET.png", width: 25%)
         ]
-        #v(0.7cm)
+        #v(1.5cm)
+
+        #align(center)[
+          #set par(justify: false)
+          #text(18pt, upper(strong(title)))
+        ]
+
+        #v(1.2cm)
+
+        #align(center)[
+          #set par(justify: false)
+          #text(14pt, upper(strong("BÁO CÁO BÀI TẬP LỚN")))
+        ]
+        #align(center)[
+          #set par(justify: false)
+          #text(13pt, (strong("Bộ môn: Kiểm thử và đảm bảo chất lượng phần mềm")))
+        ]
+
+        #v(.8cm)
 
         #align(center)[
           #set par(leading: 2em)
@@ -40,25 +58,6 @@
               .flatten(),
           )
         ]
-
-        #v(.8cm)
-
-        #align(center)[
-          #set par(justify: false)
-          #text(18pt, upper(strong(title)))
-        ]
-
-        #v(1.2cm)
-
-        #align(center)[
-          #set par(justify: false)
-          #text(14pt, upper(strong("BÁO CÁO BÀI TẬP LỚN")))
-        ]
-        #align(center)[
-          #set par(justify: false)
-          #text(13pt, (strong("Bộ môn: Kiểm thử và đảm bảo chất lượng phần mềm")))
-        ]
-
 
         #v(1fr)
 

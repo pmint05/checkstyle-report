@@ -256,7 +256,15 @@
   )
 
   show: codly-init.with()
-  show raw.where( ): it => {
+
+  show raw: it => {
+    set text(
+      font: "JetBrains Mono",
+    )
+    it
+  }
+
+  show raw.where(): it => {
     codly(
       number-format: none,
       display-icon: false,
