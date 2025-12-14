@@ -48,14 +48,13 @@
 
 === Lựa chọn dự án
 
-MegaBasterd là một trình quản lý tải xuống mã nguồn mở được viết bằng ngôn ngữ Java . Nó được thiết kế để đơn giản hóa quá trình tải xuống các tệp lớn từ dịch vụ lưu trữ đám mây Mega.nz.
+MegaBasterd là một trình quản lý tải xuống mã nguồn mở được viết bằng ngôn ngữ Java. Nó được thiết kế để đơn giản hóa quá trình tải xuống các tệp lớn từ dịch vụ lưu trữ đám mây Mega.nz.
 
 Các tính năng chính của MegaBasterd bao gồm:
-- Hỗ trợ tải xuống từ Mega.nz với tốc độ cao.
-- Hỗ trợ tải xuống hàng loạt (batch download).
+- Hỗ trợ tải xuống hàng loạt từ Mega.nz với tốc độ cao.
 - Cung cấp một giao diện dễ sử dụng để quản lý các lần tải xuống.
 
-Dự án có sẵn trên Github tại: https://github.com/tonikelope/megabasterd/
+Dự án có sẵn trên GitHub tại: https://github.com/tonikelope/megabasterd/
 
 Lí do lựa chọn dự án MegaBasterd:
 - Dự án mã nguồn mở, được viết bằng Java, phù hợp để phân tích bằng Checkstyle.
